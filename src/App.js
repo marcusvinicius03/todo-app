@@ -38,13 +38,11 @@ function App() {
       </header>
 
       <div id="body-wrapper">
-      {todos.length == 0 ? 
+      {todos.length === 0 ? 
             <span id="no-task-message">Você não tem nenhum a fazer...</span>
           : 
         <div id="tasks-wrapper">
-          {todos.length == 0 ? 
-            <span>Você não tem nenhum a fazer...</span>
-          : todos.map(todo => (
+          {todos.map(todo => (
             <div key={todo.id} className="todo-container">
             <div id="todo-left">
               <label>
@@ -57,7 +55,7 @@ function App() {
             </div>
             ))}
           </div>
-          }
+        }
       </div>
     </div>
   );
