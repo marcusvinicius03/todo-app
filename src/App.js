@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 function App() {
@@ -17,16 +17,35 @@ function App() {
     setTodos([
       ...todos, {
         id: todos.length,
-        title: value
+        title: value,
+        completed: false
       }
     ])
 
     newTodoInput.current.value = ''
   }
 
-  function deleteTodo (id) {
-    setTodos(todos.filter(todo => todo.id !== id))
+  function deleteTodo (index) {
+    const todosCopy = [...todos]
+
+    console.log(index)
+
+    todosCopy.splice(index, 1)
+
+    setTodos(todosCopy)
   }
+
+  function setTodoCompleted (index) {
+    const newTodosSet = todos
+
+    let todo = newTodosSet.splice(index, 1)
+
+    console.log(todo)
+  }
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos))
+  }, [todos])
 
   return (
     <div className="App">
@@ -40,21 +59,31 @@ function App() {
       <div id="body-wrapper">
       {todos.length === 0 ? 
             <span id="no-task-message">Você não tem nenhum a fazer...</span>
-          : 
+          :
+          <>
         <div id="tasks-wrapper">
-          {todos.map(todo => (
-            <div key={todo.id} className="todo-container">
+          <h4 className="todos-title">Suas tarefas</h4>
+          {todos.map((todo, index) => (
+            <div key={index} className="todo-container">
             <div id="todo-left">
-              <label>
+              <label className="pointer" onClick={() => setTodoCompleted(index)}>
                 <input type="checkbox" />
                 <span>Concluída?</span>
               </label>
-            <span className="todo-title">{todo.title}</span>
+            <span className={todo.completed ? "todo-title completed" : "todo-title"}>{todo.title}</span>
             </div>
-            <button className="delete-task" onClick={() => deleteTodo(todo.id)}>Deletar</button>
+            <button className="delete-task" onClick={() => deleteTodo(index)}>Deletar</button>
             </div>
             ))}
           </div>
+          
+          {/*<div id="completed-wrapper">
+            <div>Completados</div>
+            <div class="todo-container">
+
+            </div>
+          </div>*/}
+          </>
         }
       </div>
     </div>
